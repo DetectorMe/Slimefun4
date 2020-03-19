@@ -1,15 +1,5 @@
 package me.mrCookieSlime.Slimefun;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
-
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-
 import io.github.thebusybiscuit.cscorelib2.chat.ChatColors;
 import io.github.thebusybiscuit.slimefun4.core.guide.ISlimefunGuide;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideLayout;
@@ -18,32 +8,41 @@ import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.Setup.SlimefunManager;
 import me.mrCookieSlime.Slimefun.api.PlayerProfile;
 import me.mrCookieSlime.Slimefun.api.Slimefun;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
 
 public final class SlimefunGuide {
 
 	private SlimefunGuide() {}
 
 	public static ItemStack getItem(SlimefunGuideLayout design) {
-		ItemStack item = new ItemStack(Material.ENCHANTED_BOOK);
-		ItemMeta meta = item.getItemMeta();
-		List<String> lore = new LinkedList<>();
-		lore.addAll(Arrays.asList("", ChatColors.color("&eRight Click &8\u21E8 &7Browse Items"), ChatColors.color("&eShift + Right Click &8\u21E8 &7Open Settings / Credits")));
+        ItemStack item = new ItemStack(Material.ENCHANTED_BOOK);
+        ItemMeta meta = item.getItemMeta();
+        List<String> lore = new LinkedList<>();
+        lore.addAll(Arrays.asList("", ChatColors.color("&e右键 &8\u21E8 &7浏览物品"), ChatColors.color("&eShift + 右键 &8\u21E8 &7打开 设置")));
 
-		switch (design) {
-		case BOOK:
-			meta.setDisplayName(ChatColors.color("&aSlimefun Guide &7(Book GUI)"));
-			break;
-		case CHEAT_SHEET:
-			meta.setDisplayName(ChatColors.color("&cSlimefun Guide &4(Cheat Sheet)"));
-			lore.add(0, ChatColors.color("&4&lOnly openable by Admins"));
-			lore.add(0, "");
-			break;
-		case CHEST:
-			meta.setDisplayName(ChatColors.color("&aSlimefun Guide &7(Chest GUI)"));
-			break;
-		default:
-			return null;
-		}
+        switch (design) {
+            case BOOK:
+                meta.setDisplayName(ChatColors.color("&aSlimefun 指南 &7(书本界面)"));
+                break;
+            case CHEAT_SHEET:
+                meta.setDisplayName(ChatColors.color("&cSlimefun 指南 &4(作弊界面)"));
+                lore.add(0, ChatColors.color("&4&l仅限管理员使用"));
+                lore.add(0, "");
+                break;
+            case CHEST:
+                meta.setDisplayName(ChatColors.color("&aSlimefun 指南 &7(箱子界面)"));
+                break;
+            default:
+                return null;
+        }
 
 		meta.setLore(lore);
 		SlimefunPlugin.getItemTextureService().setTexture(meta, "SLIMEFUN_GUIDE");

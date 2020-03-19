@@ -1,18 +1,5 @@
 package me.mrCookieSlime.Slimefun;
 
-import java.io.File;
-import java.util.Arrays;
-import java.util.Set;
-import java.util.logging.Level;
-import java.util.stream.Collectors;
-
-import org.bukkit.Bukkit;
-import org.bukkit.World;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.java.JavaPlugin;
-
 import io.github.thebusybiscuit.cscorelib2.config.Config;
 import io.github.thebusybiscuit.cscorelib2.protection.ProtectionManager;
 import io.github.thebusybiscuit.cscorelib2.recipes.RecipeSnapshot;
@@ -24,43 +11,8 @@ import io.github.thebusybiscuit.slimefun4.core.SlimefunRegistry;
 import io.github.thebusybiscuit.slimefun4.core.commands.SlimefunCommand;
 import io.github.thebusybiscuit.slimefun4.core.commands.SlimefunTabCompleter;
 import io.github.thebusybiscuit.slimefun4.core.hooks.SlimefunHooks;
-import io.github.thebusybiscuit.slimefun4.core.services.AutoSavingService;
-import io.github.thebusybiscuit.slimefun4.core.services.BackupService;
-import io.github.thebusybiscuit.slimefun4.core.services.BlockDataService;
-import io.github.thebusybiscuit.slimefun4.core.services.CustomItemDataService;
-import io.github.thebusybiscuit.slimefun4.core.services.CustomTextureService;
-import io.github.thebusybiscuit.slimefun4.core.services.GitHubService;
-import io.github.thebusybiscuit.slimefun4.core.services.LocalizationService;
-import io.github.thebusybiscuit.slimefun4.core.services.MetricsService;
-import io.github.thebusybiscuit.slimefun4.core.services.UpdaterService;
-import io.github.thebusybiscuit.slimefun4.implementation.listeners.AncientAltarListener;
-import io.github.thebusybiscuit.slimefun4.implementation.listeners.AndroidKillingListener;
-import io.github.thebusybiscuit.slimefun4.implementation.listeners.AutonomousToolsListener;
-import io.github.thebusybiscuit.slimefun4.implementation.listeners.BackpackListener;
-import io.github.thebusybiscuit.slimefun4.implementation.listeners.BlockListener;
-import io.github.thebusybiscuit.slimefun4.implementation.listeners.BlockPhysicsListener;
-import io.github.thebusybiscuit.slimefun4.implementation.listeners.CoolerListener;
-import io.github.thebusybiscuit.slimefun4.implementation.listeners.DamageListener;
-import io.github.thebusybiscuit.slimefun4.implementation.listeners.DeathpointListener;
-import io.github.thebusybiscuit.slimefun4.implementation.listeners.DebugFishListener;
-import io.github.thebusybiscuit.slimefun4.implementation.listeners.EnhancedFurnaceListener;
-import io.github.thebusybiscuit.slimefun4.implementation.listeners.ExplosionsListener;
-import io.github.thebusybiscuit.slimefun4.implementation.listeners.GearListener;
-import io.github.thebusybiscuit.slimefun4.implementation.listeners.GrapplingHookListener;
-import io.github.thebusybiscuit.slimefun4.implementation.listeners.IgnitionChamberListener;
-import io.github.thebusybiscuit.slimefun4.implementation.listeners.ItemPickupListener;
-import io.github.thebusybiscuit.slimefun4.implementation.listeners.MultiBlockListener;
-import io.github.thebusybiscuit.slimefun4.implementation.listeners.NetworkListener;
-import io.github.thebusybiscuit.slimefun4.implementation.listeners.PlayerProfileListener;
-import io.github.thebusybiscuit.slimefun4.implementation.listeners.SlimefunBootsListener;
-import io.github.thebusybiscuit.slimefun4.implementation.listeners.SlimefunBowListener;
-import io.github.thebusybiscuit.slimefun4.implementation.listeners.SlimefunGuideListener;
-import io.github.thebusybiscuit.slimefun4.implementation.listeners.SlimefunItemListener;
-import io.github.thebusybiscuit.slimefun4.implementation.listeners.SoulboundListener;
-import io.github.thebusybiscuit.slimefun4.implementation.listeners.TalismanListener;
-import io.github.thebusybiscuit.slimefun4.implementation.listeners.TeleporterListener;
-import io.github.thebusybiscuit.slimefun4.implementation.listeners.VanillaMachinesListener;
-import io.github.thebusybiscuit.slimefun4.implementation.listeners.WorldListener;
+import io.github.thebusybiscuit.slimefun4.core.services.*;
+import io.github.thebusybiscuit.slimefun4.implementation.listeners.*;
 import io.github.thebusybiscuit.slimefun4.implementation.resources.NetherIceResource;
 import io.github.thebusybiscuit.slimefun4.implementation.resources.OilResource;
 import io.github.thebusybiscuit.slimefun4.implementation.resources.SaltResource;
@@ -83,6 +35,18 @@ import me.mrCookieSlime.Slimefun.api.Slimefun;
 import me.mrCookieSlime.Slimefun.api.inventory.UniversalBlockMenu;
 import me.mrCookieSlime.Slimefun.utils.ConfigCache;
 import me.mrCookieSlime.Slimefun.utils.Utilities;
+import org.bukkit.Bukkit;
+import org.bukkit.World;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
+
+import java.io.File;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.stream.Collectors;
 
 public final class SlimefunPlugin extends JavaPlugin implements SlimefunAddon {
 
@@ -128,27 +92,27 @@ public final class SlimefunPlugin extends JavaPlugin implements SlimefunAddon {
 				getServer().getPluginManager().disablePlugin(this);
 				return;
 			}
-			
-			instance = this;
 
-			// Creating all necessary Folders
-			getLogger().log(Level.INFO, "Loading Files...");
-			String[] storage = {"Players", "blocks", "stored-blocks", "stored-inventories", "stored-chunks", "universal-inventories", "waypoints", "block-backups"};
-			String[] general = {"scripts", "generators", "error-reports", "cache/github"};
-			for (String file : storage) createDir("data-storage/Slimefun/" + file);
-			for (String file : general) createDir("plugins/Slimefun/" + file);
+            instance = this;
 
-			getLogger().log(Level.INFO, "Loading Config...");
+            // Creating all necessary Folders
+            getLogger().log(Level.INFO, "Loading Files...");
+            String[] storage = {"Players", "blocks", "stored-blocks", "stored-inventories", "stored-chunks", "universal-inventories", "waypoints", "block-backups"};
+            String[] general = {"scripts", "generators", "error-reports", "cache/github"};
+            for (String file : storage) createDir("data-storage/Slimefun/" + file);
+            for (String file : general) createDir("plugins/Slimefun/" + file);
 
-			// Setup config.yml
-			config = new Config(this);
-			registry = new SlimefunRegistry();
-			settings = new ConfigCache(config);
+            getLogger().log(Level.INFO, "加载配置文件...");
 
-			// Loading all extra configs
-			researches = new Config(this, "Researches.yml");
-			items = new Config(this, "Items.yml");
-			whitelist = new Config(this, "whitelist.yml");
+            // Setup config.yml
+            config = new Config(this);
+            registry = new SlimefunRegistry();
+            settings = new ConfigCache(config);
+
+            // Loading all extra configs
+            researches = new Config(this, "Researches.yml");
+            items = new Config(this, "Items.yml");
+            whitelist = new Config(this, "whitelist.yml");
 
 			// Setup messages.yml
 			local = new LocalizationService(this, config.getString("options.language"));
@@ -160,42 +124,42 @@ public final class SlimefunPlugin extends JavaPlugin implements SlimefunAddon {
 			utilities = new Utilities();
 			gps = new GPSNetwork();
 
-			// Setting up bStats
-			new MetricsService(this);
+            // Setting up bStats
+            new MetricsService(this);
 
-			// Starting the Auto-Updater
-			if (config.getBoolean("options.auto-update")) {
-				updaterService.start();
-			}
+            // Starting the Auto-Updater
+            if (config.getBoolean("options.auto-update")) {
+                updaterService.start();
+            }
 
-			// Registering all GEO Resources
-			getLogger().log(Level.INFO, "Loading GEO-Resources...");
-			
-			new OilResource().register();
-			new NetherIceResource().register();
-			new UraniumResource().register();
-			new SaltResource().register();
+            // Registering all GEO Resources
+            getLogger().log(Level.INFO, "正在加载自然资源...");
 
-			getLogger().log(Level.INFO, "Loading Items...");
-			MiscSetup.setupItemSettings();
+            new OilResource().register();
+            new NetherIceResource().register();
+            new UraniumResource().register();
+            new SaltResource().register();
 
-			try {
-				SlimefunItemSetup.setup(this);
-			} catch (Exception x) {
-				getLogger().log(Level.SEVERE, "An Error occured while initializing SlimefunItems for Slimefun " + getVersion(), x);
-			}
+            getLogger().log(Level.INFO, "正在加载物品...");
+            MiscSetup.setupItemSettings();
 
-			getLogger().log(Level.INFO, "Loading Researches...");
-			ResearchSetup.setupResearches();
+            try {
+                SlimefunItemSetup.setup(this);
+            } catch (Exception x) {
+                getLogger().log(Level.SEVERE, "An Error occured while initializing SlimefunItems for Slimefun " + getVersion(), x);
+            }
 
-			settings.researchesEnabled = getResearchCfg().getBoolean("enable-researching");
+            getLogger().log(Level.INFO, "正在加载研究...");
+            ResearchSetup.setupResearches();
 
-			MiscSetup.setupMisc();
-			WikiSetup.addWikiPages(this);
-			textureService.setup(registry.getAllSlimefunItems());
+            settings.researchesEnabled = getResearchCfg().getBoolean("enable-researching");
 
-			// Setting up GitHub Connectors...
-			gitHubService.connect(config.getBoolean("options.print-out-github-data-retrieving"));
+            MiscSetup.setupMisc();
+            WikiSetup.addWikiPages(this);
+            textureService.setup(registry.getAllSlimefunItems());
+
+            // Setting up GitHub Connectors...
+            gitHubService.connect(config.getBoolean("options.print-out-github-data-retrieving"));
 
 			// All Slimefun Listeners
 			new SlimefunBootsListener(this);
@@ -273,38 +237,36 @@ public final class SlimefunPlugin extends JavaPlugin implements SlimefunAddon {
 			getServer().getScheduler().runTaskTimerAsynchronously(this, () -> {
 				try {
 					ticker.run();
-				}
-				catch(Exception x) {
-					getLogger().log(Level.SEVERE, "An Exception was caught while ticking the Block Tickers Task for Slimefun v" + getVersion(), x);
-					ticker.abortTick();
-				}
-			}, 100L, config.getInt("URID.custom-ticker-delay"));
+                } catch (Exception x) {
+                    getLogger().log(Level.SEVERE, "An Exception was caught while ticking the Block Tickers Task for Slimefun v" + getVersion(), x);
+                    ticker.abortTick();
+                }
+            }, 100L, config.getInt("URID.custom-ticker-delay"));
 
-			gitHubService.start(this);
+            gitHubService.start(this);
 
-			// Hooray!
-			getLogger().log(Level.INFO, "Finished!");
-			hooks = new SlimefunHooks(this);
+            // Hooray!
+            getLogger().log(Level.INFO, "完成!");
+            hooks = new SlimefunHooks(this);
 
-			utilities.oreWasherOutputs = new ItemStack[] {SlimefunItems.IRON_DUST, SlimefunItems.GOLD_DUST, SlimefunItems.ALUMINUM_DUST, SlimefunItems.COPPER_DUST, SlimefunItems.ZINC_DUST, SlimefunItems.TIN_DUST, SlimefunItems.LEAD_DUST, SlimefunItems.SILVER_DUST, SlimefunItems.MAGNESIUM_DUST};
+            utilities.oreWasherOutputs = new ItemStack[]{SlimefunItems.IRON_DUST, SlimefunItems.GOLD_DUST, SlimefunItems.ALUMINUM_DUST, SlimefunItems.COPPER_DUST, SlimefunItems.ZINC_DUST, SlimefunItems.TIN_DUST, SlimefunItems.LEAD_DUST, SlimefunItems.SILVER_DUST, SlimefunItems.MAGNESIUM_DUST};
 
-			// Do not show /sf elevator command in our Log, it could get quite spammy
-			CSCoreLib.getLib().filterLog("([A-Za-z0-9_]{3,16}) issued server command: /sf elevator (.{0,})");
-		}
+            // Do not show /sf elevator command in our Log, it could get quite spammy
+            CSCoreLib.getLib().filterLog("([A-Za-z0-9_]{3,16}) issued server command: /sf elevator (.{0,})");
+        }
 		else {
-			getLogger().log(Level.INFO, "#################### - INFO - ####################");
-			getLogger().log(Level.INFO, " ");
-			getLogger().log(Level.INFO, "Slimefun could not be loaded (yet).");
-			getLogger().log(Level.INFO, "It appears that you have not installed CS-CoreLib.");
-			getLogger().log(Level.INFO, "Please download and install CS-CoreLib manually:");
-			getLogger().log(Level.INFO, "https://thebusybiscuit.github.io/builds/TheBusyBiscuit/CS-CoreLib/master/");
+            getLogger().log(Level.INFO, "#################### - 信息 - ####################");
+            getLogger().log(Level.INFO, " ");
+            getLogger().log(Level.INFO, "粘液科技还没加载完成.");
+            getLogger().log(Level.INFO, "请安装前置 CS-CoreLib:");
+            getLogger().log(Level.INFO, "https://thebusybiscuit.github.io/builds/TheBusyBiscuit/CS-CoreLib/master/");
 
-			getCommand("slimefun").setExecutor((sender, cmd, label, args) -> {
-				sender.sendMessage("You have forgotten to install CS-CoreLib! Slimefun is disabled.");
-				sender.sendMessage("https://thebusybiscuit.github.io/builds/TheBusyBiscuit/CS-CoreLib/master/");
-				return true;
-			});
-		}
+            getCommand("slimefun").setExecutor((sender, cmd, label, args) -> {
+                sender.sendMessage("你没有安装前置, 粘液科技已经禁用.");
+                sender.sendMessage("https://thebusybiscuit.github.io/builds/TheBusyBiscuit/CS-CoreLib/master/");
+                return true;
+            });
+        }
 	}
 
 	private boolean isVersionUnsupported() {
@@ -330,18 +292,13 @@ public final class SlimefunPlugin extends JavaPlugin implements SlimefunAddon {
 
 			// Looks like you are using an unsupported Minecraft Version
 			if (!compatibleVersion) {
-				getLogger().log(Level.SEVERE, "### Slimefun was not installed correctly!");
-				getLogger().log(Level.SEVERE, "###");
-				getLogger().log(Level.SEVERE, "### You are using the wrong Version of Minecraft!");
-				getLogger().log(Level.SEVERE, "###");
-				getLogger().log(Level.SEVERE, "### You are using Minecraft " + ReflectionUtils.getVersion());
-				getLogger().log(Level.SEVERE, "### but Slimefun v" + getDescription().getVersion() + " requires you to be using");
-				getLogger().log(Level.SEVERE, "### Minecraft {0}", versions);
-				getLogger().log(Level.SEVERE, "###");
-				getLogger().log(Level.SEVERE, "### Please use an older Version of Slimefun and disable auto-updating");
-				getLogger().log(Level.SEVERE, "### or consider updating your Server Software.");
-				return true;
-			}
+                getLogger().log(Level.SEVERE, "### 粘液科技没有被正常安装!");
+                getLogger().log(Level.SEVERE, "###");
+                getLogger().log(Level.SEVERE, "### 你正在使用不兼容的版本 " + ReflectionUtils.getVersion());
+                getLogger().log(Level.SEVERE, "### 但粘液科技 v" + getDescription().getVersion() + " 只支持");
+                getLogger().log(Level.SEVERE, "### Minecraft {0}", versions);
+                return true;
+            }
 		}
 		
 		return false;

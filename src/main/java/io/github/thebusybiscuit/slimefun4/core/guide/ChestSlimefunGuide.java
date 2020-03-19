@@ -1,12 +1,26 @@
 package io.github.thebusybiscuit.slimefun4.core.guide;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
+import io.github.thebusybiscuit.cscorelib2.chat.ChatInput;
+import io.github.thebusybiscuit.cscorelib2.inventory.ItemUtils;
+import io.github.thebusybiscuit.cscorelib2.item.CustomItem;
+import io.github.thebusybiscuit.cscorelib2.recipes.MinecraftRecipe;
+import io.github.thebusybiscuit.slimefun4.utils.ChatUtils;
+import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
+import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
+import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu.MenuClickHandler;
+import me.mrCookieSlime.Slimefun.Lists.RecipeType;
+import me.mrCookieSlime.Slimefun.Objects.Category;
+import me.mrCookieSlime.Slimefun.Objects.LockedCategory;
+import me.mrCookieSlime.Slimefun.Objects.Research;
+import me.mrCookieSlime.Slimefun.Objects.SeasonalCategory;
+import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
+import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.interfaces.RecipeDisplayItem;
+import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.multiblocks.MultiBlockMachine;
+import me.mrCookieSlime.Slimefun.SlimefunGuide;
+import me.mrCookieSlime.Slimefun.SlimefunPlugin;
+import me.mrCookieSlime.Slimefun.api.GuideHandler;
+import me.mrCookieSlime.Slimefun.api.PlayerProfile;
+import me.mrCookieSlime.Slimefun.api.Slimefun;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -18,35 +32,16 @@ import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.RecipeChoice.MaterialChoice;
 
-import io.github.thebusybiscuit.cscorelib2.chat.ChatInput;
-import io.github.thebusybiscuit.cscorelib2.inventory.ItemUtils;
-import io.github.thebusybiscuit.cscorelib2.item.CustomItem;
-import io.github.thebusybiscuit.cscorelib2.recipes.MinecraftRecipe;
-import io.github.thebusybiscuit.slimefun4.utils.ChatUtils;
-import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
-import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
-import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu.MenuClickHandler;
-import me.mrCookieSlime.Slimefun.SlimefunGuide;
-import me.mrCookieSlime.Slimefun.SlimefunPlugin;
-import me.mrCookieSlime.Slimefun.Lists.RecipeType;
-import me.mrCookieSlime.Slimefun.Objects.Category;
-import me.mrCookieSlime.Slimefun.Objects.LockedCategory;
-import me.mrCookieSlime.Slimefun.Objects.Research;
-import me.mrCookieSlime.Slimefun.Objects.SeasonalCategory;
-import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
-import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.interfaces.RecipeDisplayItem;
-import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.multiblocks.MultiBlockMachine;
-import me.mrCookieSlime.Slimefun.api.GuideHandler;
-import me.mrCookieSlime.Slimefun.api.PlayerProfile;
-import me.mrCookieSlime.Slimefun.api.Slimefun;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class ChestSlimefunGuide implements ISlimefunGuide {
 
 	private static final int[] RECIPE_SLOTS = {3, 4, 5, 12, 13, 14, 21, 22, 23};
 	private static final int CATEGORY_SIZE = 36;
-	
+
 	private final boolean showVanillaRecipes;
-	
+
 	public ChestSlimefunGuide(boolean showVanillaRecipes) {
 		this.showVanillaRecipes = showVanillaRecipes;
 	}
@@ -58,7 +53,7 @@ public class ChestSlimefunGuide implements ISlimefunGuide {
 
 	@Override
 	public ItemStack getItem() {
-		return new CustomItem(new ItemStack(Material.ENCHANTED_BOOK), "&aSlimefun Guide &7(Chest GUI)", "", "&eRight Click &8\u21E8 &7Browse Items", "&eShift + Right Click &8\u21E8 &7Open Settings / Credits");
+		return new CustomItem(new ItemStack(Material.ENCHANTED_BOOK), "&aSlimefun 指南 &7(箱子界面)", "", "&e右键 &8\u21E8 &7浏览物品", "&eShift + 右键 &8\u21E8 &7打开 设置 / 关于");
 	}
 
 	@Override
@@ -144,7 +139,7 @@ public class ChestSlimefunGuide implements ISlimefunGuide {
 							parents.add(parent.getItem(p).getItemMeta().getDisplayName());
 						}
 
-						menu.addItem(index, new CustomItem(Material.BARRIER, "&4LOCKED &7- &r" + category.getItem(p).getItemMeta().getDisplayName(), parents.toArray(new String[0])));
+						menu.addItem(index, new CustomItem(Material.BARRIER, "&4已锁定 &7- &r" + category.getItem(p).getItemMeta().getDisplayName(), parents.toArray(new String[0])));
 						menu.addMenuClickHandler(index, ChestMenuUtils.getEmptyClickHandler());
 						index++;
 					}
@@ -217,15 +212,14 @@ public class ChestSlimefunGuide implements ISlimefunGuide {
 
 				if (survival && research != null && !profile.hasUnlocked(research)) {
 					if (Slimefun.hasPermission(p, sfitem, false)) {
-						menu.addItem(index, new CustomItem(Material.BARRIER, "&r" + ItemUtils.getItemName(sfitem.getItem()), "&4&lLOCKED", "", "&a> Click to unlock", "", "&7Cost: &b" + research.getCost() + " Level"));
+						menu.addItem(index, new CustomItem(Material.BARRIER, "&r" + ItemUtils.getItemName(sfitem.getItem()), "&4&l已锁定", "", "&a> Click to unlock", "", "&7消耗经验 &b" + research.getCost() + " 级"));
 						menu.addMenuClickHandler(index, (pl, slot, item, action) -> {
 							if (!Research.isResearching(pl)) {
 								if (research.canUnlock(pl)) {
 
 									if (profile.hasUnlocked(research)) {
 										openCategory(profile, category, true, page);
-									}
-									else {
+									} else {
 										if (!(pl.getGameMode() == GameMode.CREATIVE && SlimefunPlugin.getSettings().researchesFreeInCreative)) {
 											pl.setLevel(pl.getLevel() - research.getCost());
 										}
@@ -381,7 +375,7 @@ public class ChestSlimefunGuide implements ISlimefunGuide {
 
 			if (choices.length == 1 && choices[0] instanceof MaterialChoice) {
 				recipeItems[4] = new ItemStack(((MaterialChoice) choices[0]).getChoices().get(0));
-				
+
 				if (((MaterialChoice) choices[0]).getChoices().size() > 1) {
 					task.add(RECIPE_SLOTS[4], (MaterialChoice) choices[0]);
 				}
@@ -390,7 +384,7 @@ public class ChestSlimefunGuide implements ISlimefunGuide {
 				for (int i = 0; i < choices.length; i++) {
 					if (choices[i] instanceof MaterialChoice) {
 						recipeItems[i] = new ItemStack(((MaterialChoice) choices[i]).getChoices().get(0));
-						
+
 						if (((MaterialChoice) choices[i]).getChoices().size() > 1) {
 							task.add(RECIPE_SLOTS[i], (MaterialChoice) choices[i]);
 						}
@@ -399,10 +393,10 @@ public class ChestSlimefunGuide implements ISlimefunGuide {
 			}
 
 			if (mcRecipe == MinecraftRecipe.SHAPED_CRAFTING) {
-				recipeType = new RecipeType(new CustomItem(mcRecipe.getMachine(), null, "&7Shaped Recipe"));
+				recipeType = new RecipeType(new CustomItem(mcRecipe.getMachine(), null, "&7有序合成表"));
 			}
 			else if (mcRecipe == MinecraftRecipe.SHAPELESS_CRAFTING) {
-				recipeType = new RecipeType(new CustomItem(mcRecipe.getMachine(), null, "&7Shapeless Recipe"));
+				recipeType = new RecipeType(new CustomItem(mcRecipe.getMachine(), null, "&7无序合成表"));
 			}
 			else {
 				recipeType = new RecipeType(mcRecipe);
@@ -411,7 +405,7 @@ public class ChestSlimefunGuide implements ISlimefunGuide {
 			result = recipe.getResult();
 		}
 		else {
-			recipeItems = new ItemStack[] {null, null, null, null, new CustomItem(Material.BARRIER, "&4We are somehow unable to show you this Recipe :/"), null, null, null, null};
+			recipeItems = new ItemStack[]{null, null, null, null, new CustomItem(Material.BARRIER, "&4我们不知道为什么不能展示合成表了 :/"), null, null, null, null};
 		}
 
 		ChestMenu menu = create(p);
@@ -423,20 +417,20 @@ public class ChestSlimefunGuide implements ISlimefunGuide {
 			}
 
 			menu.addItem(28, ChestMenuUtils.getPreviousButton(p, index + 1, recipes.length),
-			(pl, slot, action, stack) -> {
-				if (index > 0) {
-					showMinecraftRecipe(recipes, index - 1, item, profile, p, false);
-				}
-				return false;
-			});
+					(pl, slot, action, stack) -> {
+						if (index > 0) {
+							showMinecraftRecipe(recipes, index - 1, item, profile, p, false);
+						}
+						return false;
+					});
 
 			menu.addItem(34, ChestMenuUtils.getNextButton(p, index + 1, recipes.length),
-			(pl, slot, action, stack) -> {
-				if (index < recipes.length - 1) {
-					showMinecraftRecipe(recipes, index + 1, item, profile, p, false);
-				}
-				return false;
-			});
+					(pl, slot, action, stack) -> {
+						if (index < recipes.length - 1) {
+							showMinecraftRecipe(recipes, index + 1, item, profile, p, false);
+						}
+						return false;
+					});
 		}
 
 		menu.open(p);
@@ -458,7 +452,7 @@ public class ChestSlimefunGuide implements ISlimefunGuide {
 		ChestMenu menu = create(p);
 
 		if (item.hasWiki()) {
-			menu.addItem(8, new CustomItem(Material.KNOWLEDGE_BOOK, ChatColor.RESET + SlimefunPlugin.getLocal().getMessage("guide.tooltips.wiki"), "", ChatColor.GRAY + "\u21E8 " + ChatColor.GREEN + SlimefunPlugin.getLocal().getMessage(p, "guide.tooltips.open-category")));
+			menu.addItem(8, new CustomItem(Material.KNOWLEDGE_BOOK, "&rView this Item on our Wiki &7(Slimefun Wiki)", "", "&7\u21E8 Click to open"));
 			menu.addMenuClickHandler(8, (pl, slot, itemstack, action) -> {
 				pl.closeInventory();
 				ChatUtils.sendURL(pl, item.getWiki());
@@ -517,7 +511,7 @@ public class ChestSlimefunGuide implements ISlimefunGuide {
 			SlimefunPlugin.getLocal().sendMessage(pl, "guide.search.message");
 
 			ChatInput.waitForPlayer(SlimefunPlugin.instance, pl, msg ->
-				SlimefunGuide.openSearch(profile, msg, survival, true)
+					SlimefunGuide.openSearch(profile, msg, survival, true)
 			);
 
 			return false;
@@ -534,9 +528,9 @@ public class ChestSlimefunGuide implements ISlimefunGuide {
 		if (playerHistory.size() > 1) {
 
 			menu.addItem(slot, new CustomItem(ChestMenuUtils.getBackButton(p,
-				"",
-				"&rLeft Click: &7Go back to previous Page",
-				"&rShift + left Click: &7Go back to Main Menu"
+					"",
+					"&rLeft Click: &7Go back to previous Page",
+					"&rShift + left Click: &7Go back to Main Menu"
 			)));
 
 			menu.addMenuClickHandler(slot, (pl, s, is, action) -> {
@@ -552,7 +546,7 @@ public class ChestSlimefunGuide implements ISlimefunGuide {
 
 		}
 		else {
-			menu.addItem(slot, new CustomItem(ChestMenuUtils.getBackButton(p, "", ChatColor.GRAY + SlimefunPlugin.getLocal().getMessage(p, "guide.back.guide"))));
+			menu.addItem(slot, new CustomItem(ChestMenuUtils.getBackButton(p, "", SlimefunPlugin.getLocal().getMessage(p, "guide.back.guide"))));
 			menu.addMenuClickHandler(slot, (pl, s, is, action) -> {
 				openMainMenu(profile, survival, 1);
 				return false;
@@ -565,8 +559,8 @@ public class ChestSlimefunGuide implements ISlimefunGuide {
 			SlimefunItem slimefunItem = SlimefunItem.getByItem(item);
 			if (slimefunItem == null) return item;
 
-			String lore = Slimefun.hasPermission(p, slimefunItem, false) ? "&rNeeds to be unlocked elsewhere" : "&rNo Permission";
-			return Slimefun.hasUnlocked(p, slimefunItem, false) ? item: new CustomItem(Material.BARRIER, ItemUtils.getItemName(item), "&4&lLOCKED", "", lore);
+			String lore = Slimefun.hasPermission(p, slimefunItem, false) ? "&r需要在别处解锁" : "&r你没有权限";
+			return Slimefun.hasUnlocked(p, slimefunItem, false) ? item : new CustomItem(Material.BARRIER, ItemUtils.getItemName(item), "&4&l已锁定", "", lore);
 		}
 		else {
 			return item;
@@ -594,7 +588,7 @@ public class ChestSlimefunGuide implements ISlimefunGuide {
 					displayRecipes(pl, profile, menu, sfItem, page - 1);
 					pl.playSound(pl.getLocation(), Sound.ITEM_BOOK_PAGE_TURN, 1, 1);
 				}
-				
+
 				return false;
 			});
 
@@ -604,7 +598,7 @@ public class ChestSlimefunGuide implements ISlimefunGuide {
 					displayRecipes(pl, profile, menu, sfItem, page + 1);
 					pl.playSound(pl.getLocation(), Sound.ITEM_BOOK_PAGE_TURN, 1, 1);
 				}
-				
+
 				return false;
 			});
 

@@ -1,10 +1,9 @@
 package me.mrCookieSlime.Slimefun.utils;
 
-import org.bukkit.ChatColor;
-import org.bukkit.inventory.ItemStack;
-
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
+import org.bukkit.ChatColor;
+import org.bukkit.inventory.ItemStack;
 
 @Deprecated
 public final class MachineHelper {
@@ -12,17 +11,17 @@ public final class MachineHelper {
 	private MachineHelper() {}
 	
 	public static String getTimeLeft(int seconds) {
-		String timeleft = "";
-		
+        String timeleft = "";
+
         int minutes = (int) (seconds / 60L);
         if (minutes > 0) {
-            timeleft = String.valueOf(timeleft) + minutes + "m ";
+            timeleft = timeleft + minutes + "分钟 ";
         }
-        
+
         seconds -= minutes * 60;
-        timeleft = String.valueOf(timeleft) + seconds + "s";
-        return ChatColor.translateAlternateColorCodes('&', "&7" + timeleft + " left");
-	}
+        timeleft = timeleft + seconds + "秒";
+        return ChatColor.translateAlternateColorCodes('&', "&7剩余 " + timeleft);
+    }
 
 	public static String getProgress(int time, int total) {
 		StringBuilder progress = new StringBuilder();
