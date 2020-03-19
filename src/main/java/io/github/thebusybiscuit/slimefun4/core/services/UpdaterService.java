@@ -1,32 +1,56 @@
 package io.github.thebusybiscuit.slimefun4.core.services;
 
+import java.io.File;
+import java.util.logging.Level;
+
+import org.bukkit.plugin.Plugin;
+
+import io.github.thebusybiscuit.cscorelib2.updater.GitHubBuildsUpdater;
 import io.github.thebusybiscuit.cscorelib2.updater.Updater;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunBranch;
 
-/**
- * This Class represents our {@link Updater} Service.
- * If enabled, it will automatically connect to https://thebusybiscuit.github.io/builds/
- * to check for updates and to download them automatically.
- *
- * @author TheBusyBiscuit
- */
 public class UpdaterService {
 
-    // 汉化版不提供自动更新服务.
-    private final SlimefunBranch branch;
+	private final Updater updater;
+	private final SlimefunBranch branch;
 
-    public UpdaterService() {
-        branch = SlimefunBranch.UNKNOWN;
-    }
+	public UpdaterService(Plugin plugin, File file) {
+		String version = plugin.getDescription().getVersion();
 
-    /**
-     * This method returns the branch the current build of Slimefun is running on.
-     * This can be used to determine whether we are dealing with an official build
-     * or a build that was unofficially modified.
-     *
-     * @return The branch this build of Slimefun is on.
-     */
-    public SlimefunBranch getBranch() {
-        return branch;
-    }
+		if (version.equals("UNOFFICIAL")) {
+			// This Server is using a modified build that is not a public release.
+			plugin.getLogger().log(Level.WARNING, "##################################################");
+			plugin.getLogger().log(Level.WARNING, "It looks like you are using an unofficially modified build of Slimefun!");
+			plugin.getLogger().log(Level.WARNING, "Auto-Updates have been disabled, this build is not considered safe.");
+			plugin.getLogger().log(Level.WARNING, "Do not report bugs encountered in this Version of Slimefun.");
+			plugin.getLogger().log(Level.WARNING, "##################################################");
+			updater = null;
+			branch = SlimefunBranch.UNOFFICIAL;
+		}
+		else if (version.startsWith("DEV - ")) {
+			// If we are using a development build, we want to switch to our custom 
+			updater = new GitHubBuildsUpdater(plugin, file, "TheBusyBiscuit/Slimefun4/master");
+			branch = SlimefunBranch.DEVELOPMENT;
+		}
+		else if (version.startsWith("RC - ")) {
+			// If we are using a "stable" build, we want to switch to our custom 
+			updater = new GitHubBuildsUpdater(plugin, file, "TheBusyBiscuit/Slimefun4/stable", "RC - ");
+			branch = SlimefunBranch.STABLE;
+		}
+		else {
+			updater = null;
+			branch = SlimefunBranch.UNKNOWN;
+		}
+	}
+	
+	public SlimefunBranch getBranch() {
+		return branch;
+	}
+
+	public void start() {
+		if (updater != null) {
+			updater.start();
+		}
+	}
+
 }

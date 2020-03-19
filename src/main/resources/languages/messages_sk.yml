@@ -2,7 +2,6 @@
 android:
   scripts:
     already-uploaded: "&4Tento skript už bol nahraný."
-    editor: Editor skriptu
     enter-name:
     - 
     - "&eProsím napíš meno tvojho skriptu"
@@ -39,6 +38,7 @@ android:
     uploaded:
     - "&bNahrávam..."
     - "&aSkript bol úspešne nahraný!"
+    editor: Editor skriptu
   started: "&7Tvoj Android pokračuje vo svojom skripte"
   stopped: "&7Tvoj Android pauzol svoj skript"
 anvil:
@@ -103,12 +103,10 @@ guide:
     previous: Predošlá stránka
   search:
     lore:
-      - "&bČo by si chcel vyhľadať?"
-      - "&7Napíš čo chceš hľadať do chatu"
+    - "&bČo by si chcel vyhľadať?"
+    - "&7Napíš čo chceš hľadať do chatu"
     message: "&bČo by si chcel vyhľadať?"
     name: "&7Hľadať..."
-    tooltip: "&bKlikni pre hľadanie itemu"
-    inventory: 'Hľadám: %item%'
   title:
     addons: Doplnky pre Slimefun4
     bugs: Report bugov
@@ -120,24 +118,18 @@ guide:
     wiki: Slimefun4 Wiki
   tooltips:
     open-category: Klikni pre otvorenie
-    recipes:
-      generator: Dostupné palivá
-      gold-pan: Materiály, ktoré môžeš získať
-      machine: Recepty vytvárané týmto strojom
-      miner: Materiály, ktoré môžeš získať s týmto minerom
     versions-notice: Toto je veľmi dôležité pri nahlasovaní bugov!
     wiki: Pozri si tento item na oficiálnej wiki slimefunu
-  locked: ZAMKNUTÉ
-  locked-category:
-    - Pre odomknutie tejto kategórie
-    - budeš musieť odomknúť všetky itemy
-    - z nasledujúcich kategórií
+    recipes:
+      machine: Recepty vytvárané týmto strojom
+      miner: Materiály, ktoré môžeš získať s týmto minerom
+      generator: Dostupné palivá
+      gold-pan: Materiály, ktoré môžeš získať
 inventory:
   no-access: "&4Nemáš opŕavnenie na otvorenie tohto bloku"
 languages:
   af: Afrikánčina
   ar: Arabčina
-  bg: Bulharčina
   cs: Čeština
   da: Dánčina
   de: Nemčina
@@ -145,15 +137,12 @@ languages:
   el: Gréčtina
   en: Angličtina
   es: Španielčina
-  fa: Perština
   fi: Fínština
   fr: Francúzština
   he: Hebrejčina
   hu: Maďarčina
   id: Indonézčina
   it: Taliančina
-  ja: Japonština
-  ko: Kórejčina
   lv: Lotyština
   ms: Malajština
   nl: Holandčina
@@ -161,16 +150,17 @@ languages:
   pl: Poľština
   pt: Portugalština (Portugalsko)
   pt-BR: Portugalština (Brazília)
-  ro: Rumunčina
   ru: Ruština
   sk: Slovenčina
   sv: Švédština
-  th: Thajčina
-  tr: Turečtina
   uk: Ukrajinčina
   vi: Vietnamčina
   zh-CN: Čínština (Čína)
   zh-TW: Čínština (Taiwan)
+  ja: Japonština
+  fa: Perština
+  th: Thajčina
+  ro: Rumunčina
 machines:
   ANCIENT_ALTAR:
     not-enough-pedestals: "&4Oltár nie je obkolesený dostatočným počtom podstáv&c(%pedestals%
@@ -189,10 +179,6 @@ machines:
     no-destinations: "&4Nenájdený žiaden cieľ"
     pick-a-floor: "&3- Výber podlažia  -"
   full-inventory: "&ePrepáč, môj inventár je preplnený!!!"
-  GPS_CONTROL_PANEL:
-    title: Ovládací panel GPS
-    transmitters: Prehľad vysielača
-    waypoints: Prehľad waypointov
   HOLOGRAM_PROJECTOR:
     enter-text: "&7Prosím napíš text pre hologram do chatu. &r(Kódy farieb sú podporované!)"
     inventory-title: Editor hologramu
@@ -205,14 +191,14 @@ machines:
     invulnerability: "&b&lSi na 30 sekúnd nezraniteľný!"
     teleported: "&3Bol si teleportovaný!"
     teleporting: "&3Teleportujem..."
-    gui:
-      title: Tvoje waypointy
-      tooltip: Klikni pre teleport
-      time: Odhadovaný čas
   unknown-material: "&ePrepáč, nedokážem rozpoznať item v mojom dispenseri. Prosím
     vlož item, ktorý poznám."
   wrong-item: "&ePrepáč, nedokážem rozpoznať item s ktorým si na mňa klikol pravým
     tlačítkom. Pozri si recepty a pozri, ktoré itemy môžeš použiť."
+  GPS_CONTROL_PANEL:
+    title: Ovládací panel GPS
+    transmitters: Prehľad vysielača
+    waypoints: Prehľad waypointov
 messages:
   cannot-place: "&cNemôžeš tam umiestniť blok!"
   diet-cookie: "&eZačínaš sa cítiť chudší..."

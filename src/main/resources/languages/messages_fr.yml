@@ -2,7 +2,6 @@
 android:
   scripts:
     already-uploaded: "&4Ce script a déjà été upload."
-    editor: Éditeur de script
     enter-name:
     - 
     - "&eVeuillez saisir un nom pour votre script"
@@ -39,6 +38,7 @@ android:
     uploaded:
     - "&bUpload du script..."
     - "&aVotre script a bien été upload !"
+    editor: Éditeur de script
   started: "&7Votre androïde a repris l'exécution de son script"
   stopped: "&7Votre androïde a mis en pause l'exécution de son script"
 anvil:
@@ -101,22 +101,15 @@ guide:
       lore: Cliquez pour ajouter votre propre traduction
       name: "&aIl manque quelque chose ?"
     updated: "&aVotre langue a été correctement définie sur : &b%lang%"
-  locked: VERROUILLÉ
-  locked-category:
-    - Pour déverrouiller cette catégorie, vous devrez
-    - déverrouiller tous les objets des
-    - catégories suivantes
   pages:
     next: Page suivante
     previous: Page précédente
   search:
     lore:
-      - "&bQue souhaitez-vous rechercher?"
-      - "&7Entrez votre terme de recherche dans le chat"
+    - "&bQue souhaitez-vous rechercher?"
+    - "&7Entrez votre terme de recherche dans le chat"
     message: "&bQue souhaitez-vous rechercher?"
     name: "&7Rechercher..."
-    inventory: 'Rechercher: %item%'
-    tooltip: "&bCliquez pour rechercher un objet"
   title:
     addons: Extensions de Slimefun4
     bugs: Signaler un bug
@@ -128,20 +121,19 @@ guide:
     wiki: Wiki Slimefun4
   tooltips:
     open-category: Cliquez pour ouvrir
-    recipes:
-      generator: Types de carburant disponibles
-      gold-pan: Ressources pouvant être obtenues
-      machine: Recettes fabriquées dans cette machine
-      miner: Ressources pouvant être obtenues avec ce mineur
     versions-notice: Ces informations sont très importantes lorsque vous rapportez
       des bugs !
     wiki: Voir cet objet sur le wiki officiel de Slimefun
+    recipes:
+      machine: Recettes fabriquées dans cette machine
+      miner: Ressources pouvant être obtenues avec ce mineur
+      generator: Types de carburant disponibles
+      gold-pan: Ressources pouvant être obtenues
 inventory:
   no-access: "&4Vous n'avez pas la permission d'accéder à ce bloc"
 languages:
   af: Afrikaans
   ar: Arabe
-  bg: Bulgare
   cs: Tchèque
   da: Danois
   de: Allemand
@@ -149,15 +141,12 @@ languages:
   el: Grec
   en: Anglais
   es: Espagnol
-  fa: Persan
   fi: Finnois
   fr: Français
   he: Hébreu
   hu: Hongrois
   id: Indonésien
   it: Italien
-  ja: Japonais
-  ko: Coréen
   lv: Letton
   ms: Malais
   nl: Néerlandais
@@ -165,16 +154,17 @@ languages:
   pl: Polonais
   pt: Portugais (Portugal)
   pt-BR: Portugais (Brésil)
-  ro: Roumain
   ru: Russe
   sk: Slovaque
   sv: Suédois
-  th: Thaï
-  tr: Turc
   uk: Ukrainien
   vi: Vietnamien
   zh-CN: Chinois (Chine)
   zh-TW: Chinois (Taiwan)
+  ja: Japonais
+  fa: Persan
+  th: Thaï
+  ro: Roumain
 machines:
   ANCIENT_ALTAR:
     not-enough-pedestals: "&4L'autel n'est pas entouré du bon nombre de piédestaux
@@ -196,10 +186,6 @@ machines:
     no-destinations: "&4Aucune destination trouvée"
     pick-a-floor: "&3- Sélectionnez un étage -"
   full-inventory: "&eDésolé, mon inventaire est plein !"
-  GPS_CONTROL_PANEL:
-    title: Panneau de configuration GPS
-    transmitters: Vue d'ensemble de l'émetteur
-    waypoints: Vue d'ensemble des waypoints
   HOLOGRAM_PROJECTOR:
     enter-text: "&7Veuillez saisir le texte voulu pour votre hologramme dans le chat.
       &r(Les codes couleur sont acceptés !)"
@@ -210,10 +196,6 @@ machines:
     les objets correctement dans le distributeur."
   TELEPORTER:
     cancelled: "&4Téléportation annulée !"
-    gui:
-      time: Temps estimé
-      title: Vos waypoints
-      tooltip: Cliquez pour vous téléporter
     invulnerability: "&b&lVous avez reçu 30 secondes d'invulnérabilité !"
     teleported: "&3Téléportation terminée !"
     teleporting: "&3Téléportation..."
@@ -221,6 +203,10 @@ machines:
     y placer quelque chose que je connais."
   wrong-item: "&eDésolé, je ne reconnais pas l'objet avec lequel vous avez cliqué.
     Consultez le guide pour savoir quels objets vous pouvez utiliser."
+  GPS_CONTROL_PANEL:
+    title: Panneau de configuration GPS
+    transmitters: Vue d'ensemble de l'émetteur
+    waypoints: Vue d'ensemble des waypoints
 messages:
   cannot-place: "&cVous ne pouvez pas placer ce bloc là !"
   diet-cookie: "&eVous vous sentez léger comme une plume..."

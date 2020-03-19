@@ -1,8 +1,5 @@
 package io.github.thebusybiscuit.slimefun4.core.services;
 
-import me.mrCookieSlime.Slimefun.SlimefunPlugin;
-import me.mrCookieSlime.Slimefun.api.Slimefun;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -18,126 +15,123 @@ import java.util.logging.Level;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-/**
- * This Service creates a Backup of your Slimefun world data on every server shutdown.
- *
- * @author TheBusyBiscuit
- *
- */
-public class BackupService implements Runnable {
+import me.mrCookieSlime.Slimefun.SlimefunPlugin;
+import me.mrCookieSlime.Slimefun.api.Slimefun;
 
-    @Override
-    public void run() {
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd-HH-mm");
+public class BackupService {
+	
+	public void run() {
+		DateFormat format = new SimpleDateFormat("yyyy-MM-dd-HH-mm");
+		
+		File folder = new File("data-storage/Slimefun/block-backups");
+		List<File> backups = Arrays.asList(folder.listFiles());
 
-        File folder = new File("data-storage/Slimefun/block-backups");
-        List<File> backups = Arrays.asList(folder.listFiles());
+		if (backups.size() > 20) {
+			deleteOldBackups(format, backups);
+		}
 
-        if (backups.size() > 20) {
-            deleteOldBackups(format, backups);
-        }
+		File file = new File("data-storage/Slimefun/block-backups/" + format.format(new Date()) + ".zip");
+		
+		if (!file.exists() || file.delete()) {
+			try {
+				if (file.createNewFile()) {
+					try (ZipOutputStream output = new ZipOutputStream(new FileOutputStream(file))) {
+						createBackup(output);
+					}
 
-        File file = new File("data-storage/Slimefun/block-backups/" + format.format(new Date()) + ".zip");
+					Slimefun.getLogger().log(Level.INFO, "Backed up Data to: " + file.getName());
+				}
+				else {
+					Slimefun.getLogger().log(Level.WARNING, "Could not create backup-file: " + file.getName());
+				}
+			} catch(IOException x) {
+				Slimefun.getLogger().log(Level.SEVERE, "An Error occured while creating a World-Backup for Slimefun " + SlimefunPlugin.getVersion(), x);
+			}
+		}
+	}
 
-        if (!file.exists() || file.delete()) {
-            try {
-                if (file.createNewFile()) {
-                    try (ZipOutputStream output = new ZipOutputStream(new FileOutputStream(file))) {
-                        createBackup(output);
-                    }
+	private void createBackup(ZipOutputStream output) throws IOException {
+		byte[] buffer = new byte[1024];
+		
+		for (File folder : new File("data-storage/Slimefun/stored-blocks/").listFiles()) {
+			for (File file : folder.listFiles()) {
+				ZipEntry entry = new ZipEntry("stored-blocks/" + folder.getName() + '/' + file.getName());
+				output.putNextEntry(entry);
 
-                    Slimefun.getLogger().log(Level.INFO, "已备份 Slimefun 数据到: {0}", file.getName());
-                } else {
-                    Slimefun.getLogger().log(Level.WARNING, "Could not create backup-file: {0}", file.getName());
-                }
-            } catch (IOException x) {
-                Slimefun.getLogger().log(Level.SEVERE, "An Error occured while creating a backup for Slimefun " + SlimefunPlugin.getVersion(), x);
-            }
-        }
-    }
+				try (FileInputStream input = new FileInputStream(file)) {
+					int length;
+					
+					while ((length = input.read(buffer)) > 0) {
+						output.write(buffer, 0, length);
+					}
+				}
 
-    private void createBackup(ZipOutputStream output) throws IOException {
-        byte[] buffer = new byte[1024];
+				output.closeEntry();
+			}
+		}
 
-        for (File folder : new File("data-storage/Slimefun/stored-blocks/").listFiles()) {
-            for (File file : folder.listFiles()) {
-                ZipEntry entry = new ZipEntry("stored-blocks/" + folder.getName() + '/' + file.getName());
-                output.putNextEntry(entry);
+		for (File file : new File("data-storage/Slimefun/universal-inventories/").listFiles()) {
+			ZipEntry entry = new ZipEntry("universal-inventories/" + file.getName());
+			output.putNextEntry(entry);
 
-                try (FileInputStream input = new FileInputStream(file)) {
-                    int length;
+			try (FileInputStream input = new FileInputStream(file)) {
+				int length;
+				
+				while ((length = input.read(buffer)) > 0) {
+					output.write(buffer, 0, length);
+				}
+			}
 
-                    while ((length = input.read(buffer)) > 0) {
-                        output.write(buffer, 0, length);
-                    }
-                }
+			output.closeEntry();
+		}
 
-                output.closeEntry();
-            }
-        }
+		for (File file : new File("data-storage/Slimefun/stored-inventories/").listFiles()) {
+			ZipEntry entry = new ZipEntry("stored-inventories/" + file.getName());
+			output.putNextEntry(entry);
 
-        for (File file : new File("data-storage/Slimefun/universal-inventories/").listFiles()) {
-            ZipEntry entry = new ZipEntry("universal-inventories/" + file.getName());
-            output.putNextEntry(entry);
+			try (FileInputStream input = new FileInputStream(file)) {
+				int length;
+				
+				while ((length = input.read(buffer)) > 0) {
+					output.write(buffer, 0, length);
+				}
+			}
 
-            try (FileInputStream input = new FileInputStream(file)) {
-                int length;
+			output.closeEntry();
+		}
 
-                while ((length = input.read(buffer)) > 0) {
-                    output.write(buffer, 0, length);
-                }
-            }
+		File chunks = new File("data-storage/Slimefun/stored-chunks/chunks.sfc");
 
-            output.closeEntry();
-        }
+		if (chunks.exists()) {
+			ZipEntry entry = new ZipEntry("stored-chunks/chunks.sfc");
+			output.putNextEntry(entry);
 
-        for (File file : new File("data-storage/Slimefun/stored-inventories/").listFiles()) {
-            ZipEntry entry = new ZipEntry("stored-inventories/" + file.getName());
-            output.putNextEntry(entry);
+			try (FileInputStream input = new FileInputStream(chunks)) {
+				int length;
+				
+				while ((length = input.read(buffer)) > 0) {
+					output.write(buffer, 0, length);
+				}
+			}
 
-            try (FileInputStream input = new FileInputStream(file)) {
-                int length;
+			output.closeEntry();
+		}
+	}
 
-                while ((length = input.read(buffer)) > 0) {
-                    output.write(buffer, 0, length);
-                }
-            }
+	private void deleteOldBackups(DateFormat format, List<File> backups) {
+		Collections.sort(backups, (a, b) -> {
+			try {
+				return (int) (format.parse(a.getName().replace(".zip", "")).getTime() - format.parse(b.getName().replace(".zip", "")).getTime());
+			} catch (ParseException e) {
+				return 0;
+			}
+		});
 
-            output.closeEntry();
-        }
-
-        File chunks = new File("data-storage/Slimefun/stored-chunks/chunks.sfc");
-
-        if (chunks.exists()) {
-            ZipEntry entry = new ZipEntry("stored-chunks/chunks.sfc");
-            output.putNextEntry(entry);
-
-            try (FileInputStream input = new FileInputStream(chunks)) {
-                int length;
-
-                while ((length = input.read(buffer)) > 0) {
-                    output.write(buffer, 0, length);
-                }
-            }
-
-            output.closeEntry();
-        }
-    }
-
-    private void deleteOldBackups(DateFormat format, List<File> backups) {
-        Collections.sort(backups, (a, b) -> {
-            try {
-                return (int) (format.parse(a.getName().replace(".zip", "")).getTime() - format.parse(b.getName().replace(".zip", "")).getTime());
-            } catch (ParseException e) {
-                return 0;
-            }
-        });
-
-        for (int i = backups.size() - 20; i > 0; i--) {
-            if (!backups.get(i).delete()) {
-                Slimefun.getLogger().log(Level.WARNING, "无法删除备份 {0}", backups.get(i).getName());
-            }
-        }
-    }
+		for (int i = backups.size() - 20; i > 0; i--) {
+			if (!backups.get(i).delete()) {
+				Slimefun.getLogger().log(Level.WARNING, "Could not delete Backup: " + backups.get(i).getName());
+			}
+		}
+	}
 
 }

@@ -2,7 +2,6 @@
 android:
   scripts:
     already-uploaded: "&4Ezt a szkriptet már feltöltötték."
-    editor: Szkript Szerkesztő
     enter-name:
     - 
     - "&eKérlek, írd be a szkript nevét"
@@ -23,8 +22,8 @@ android:
       GO_DOWN: "&7Menj lefelé"
       GO_FORWARD: "&7Menj előre"
       GO_UP: "&7Menj felfelé"
-      INTERFACE_FUEL: "&cVegyen ki az Üzemanyagot a csatlakozási Felületről"
-      INTERFACE_ITEMS: "&9Tegye az Eszköztár Tartalmát a csatlakozási Felületbe"
+      INTERFACE_FUEL: "&cVegyen ki az Üzemanyagot a faced Interface-ből"
+      INTERFACE_ITEMS: "&9Tegye az Eszköztár Tartalmát a faced Interface-be"
       MOVE_AND_DIG_DOWN: "&bMenj és Áss lefelé"
       MOVE_AND_DIG_FORWARD: "&bMenj és Áss előre"
       MOVE_AND_DIG_UP: "&bMenj és Áss felfelé"
@@ -39,6 +38,7 @@ android:
     uploaded:
     - "&bFeltöltés..."
     - "&aA szkript sikeresen feltöltve!"
+    editor: Szkript Szerkesztő
   started: "&7Az Androidod folytatja a szkript futtatását"
   stopped: "&7Az Androidod szünetelteti a szkript futtatását"
 anvil:
@@ -64,7 +64,7 @@ commands:
 gps:
   deathpoint: "&4Halálpont &7%date%"
   geo:
-    scan-required: "&4GEO-Vizsgálat szükséges! &cElőbb vizsgáld meg ezt a chunkot
+    scan-required: "&4GEO-Vizsgálat szükséges! &cElőbb vizsgáld meg ezt a chunk-ot
       a GEO-Szkennerrel!"
   insufficient-complexity:
   - "&4Nem megfelelő a GPS Hálózat Komplexitása: &c%complexity%"
@@ -118,19 +118,18 @@ guide:
     wiki: Slimefun4 Wiki
   tooltips:
     open-category: Kattints a megnyitáshoz
-    recipes:
-      generator: Rendelkezésre álló üzemanyagtípusok
-      gold-pan: Megszerezhető források
-      machine: Ebben a Gépben készített receptek
-      miner: Erőforrások, amelyeket ezzel a Bányásszal szerezhetsz be
     versions-notice: Ezek nagyon fontosak a hibák jelentésekor!
     wiki: Tekintsd meg ezt a tárgyat a hivatalos Slimefun Wikin
+    recipes:
+      machine: Ebben a Gépben készített receptek
+      miner: Erőforrások, amelyeket ezzel a Bányásszal szerezhetsz be
+      generator: Rendelkezésre álló üzemanyagtípusok
+      gold-pan: Megszerezhető források
 inventory:
   no-access: "&4Nincs hozzáférésed ehhez a blokkhoz"
 languages:
   af: Afrikánsz
   ar: Arab
-  bg: Bolgár
   cs: Cseh
   da: Dán
   de: Német
@@ -138,15 +137,12 @@ languages:
   el: Görög
   en: Angol
   es: Spanyol
-  fa: Perzsa
   fi: Finn
   fr: Francia
   he: Héber
   hu: Magyar
   id: Indonéz
   it: Olasz
-  ja: Japán
-  ko: Koreai
   lv: Lett
   ms: Maláj
   nl: Holland
@@ -154,24 +150,25 @@ languages:
   pl: Lengyel
   pt: Portugál (Portugália)
   pt-BR: Portugál (Brazília)
-  ro: Román
   ru: Orosz
   sk: Szlovák
   sv: Svéd
-  th: Thai
-  tr: Török
   uk: Ukrán
   vi: Vietnami
   zh-CN: Kínai (Kína)
   zh-TW: Kínai (Tajvan)
+  ja: Japán
+  fa: Perzsa
+  th: Thai
+  ro: Román
 machines:
   ANCIENT_ALTAR:
-    not-enough-pedestals: "&4Az Oltár körül nincs elég Talapzat, ami szükséges a működéséhez
+    not-enough-pedestals: "&4Az Altar körül nincs elég Pedestal, ami szükséges a működéséhez
       &c(%pedestals% / 8)"
     unknown-catalyst: "&4Ismeretlen Katalizátor! &cEhelyett használd a helyes Receptet!"
     unknown-recipe: "&4Ismeretlen Recept! &cEhelyett használd a helyes Receptet!"
   ANCIENT_PEDESTAL:
-    obstructed: "&4A Talapzat el van torlaszolva! &cTávolíts el mindent, ami a talapzat
+    obstructed: "&4A Pedestal el van torlaszolva! &cTávolíts el mindent, ami a pedestal
       felett van!"
   CARGO_NODES:
     must-be-placed: "&4Ládára vagy gépre kell helyezni!"
@@ -184,15 +181,11 @@ machines:
     no-destinations: "&4Nem található úticél"
     pick-a-floor: "&3- Válassz emeletet -"
   full-inventory: "&eSajnálom, tele a tárolóm!"
-  GPS_CONTROL_PANEL:
-    title: GPS - Vezérlőpult
-    transmitters: Transzmitter Áttekintése
-    waypoints: Útpont Áttekintése
   HOLOGRAM_PROJECTOR:
     enter-text: "&7Kérlek, írd be a kívánt Hologram Szöveget a Chatbe. &r(A színkódok
       is használhatóak!)"
     inventory-title: Hologram Szerkesztő
-  ignition-chamber-no-flint: "&cA Gyújtókamrából hiányzik a Kovakő és Acél."
+  ignition-chamber-no-flint: "&cAz Ignition Chamber-ből hiányik a Kovakő és Acél."
   in-use: "&cEnnek a Blokknak a tárolóját éppen megnyitotta egy másik Játékos."
   pattern-not-found: "&eSajnálom, nem ismerem fel ezt a Receptet. Kérlek, helyezd
     a Tárgyakat a megfelelő mintában az Adagolóba."
@@ -205,6 +198,10 @@ machines:
     tegyél bele valamit, amit ismerek."
   wrong-item: "&eSajnálom, nem ismerem fel azt a Tárgyat, amire kattintottál velem.
     Ellenőrizd a Recepteket, és nézd meg, mely Tárgyakat használhatod."
+  GPS_CONTROL_PANEL:
+    title: GPS - Vezérlőpult
+    transmitters: Transzmitter Áttekintése
+    waypoints: Útpont Áttekintése
 messages:
   cannot-place: "&cNem teheted ezt a blokkot oda!"
   diet-cookie: "&eNagyon könnyednek érzed magad..."

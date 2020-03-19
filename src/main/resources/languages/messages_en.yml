@@ -16,18 +16,12 @@ commands:
     reset-target: '&cYour Knowledge has been reset'
 
 guide:
-  locked: 'LOCKED'
-
-  locked-category:
-    - 'To unlock this category you will'
-    - 'need to unlock all items from the'
-    - 'following categories'
-
   search:
     message: '&bWhat would you like to search for?'
     name: '&7Search...'
-    tooltip: '&bClick to search for an item'
-    inventory: 'Searching for: %item%'
+    lore:
+    - '&bWhat would you like to search for?'
+    - '&7Type your search term into chat'
 
   tooltips:
     open-category: 'Click to open'
@@ -182,11 +176,6 @@ machines:
     teleported: '&3Teleported!'
     cancelled: '&4Teleportation cancelled!'
     invulnerability: '&b&lYou have been given 30 seconds of Invulnerability!'
-
-    gui:
-      title: 'Your waypoints'
-      tooltip: 'Click to teleport'
-      time: 'Estimated time'
   
   GPS_CONTROL_PANEL:
     title: 'GPS - Control Panel'
@@ -310,6 +299,3 @@ languages:
   fa: 'Persian'
   th: 'Thai'
   ro: 'Romanian'
-  bg: 'Bulgarian'
-  ko: 'Korean'
-  tr: 'Turkish'

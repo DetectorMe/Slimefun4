@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>me.mrCookieSlime</groupId>
     <artifactId>Slimefun</artifactId>
-    <version>4.2-NIGHTLY-200317</version>
+    <version>UNOFFICIAL</version>
     
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -41,8 +41,8 @@
     
     <build>
         <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
-        <finalName>${project.name}-v${project.version}</finalName>
-
+        <finalName>${project.name} v${project.version}</finalName>
+        
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -157,13 +157,6 @@
             <version>1.2.0</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/lib/ExoticGarden v1.2.0.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>com.bekvon.bukkit</groupId>
-            <artifactId>residence</artifactId>
-            <version>4.8.8.2</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/Residence4.8.8.2.jar</systemPath>
         </dependency>
     </dependencies>
 </project>
