@@ -656,10 +656,9 @@ public class BlockStorage {
 
     public static BlockMenu getInventory(Location l) {
         BlockStorage storage = getStorage(l.getWorld());
-        if (storage == null) return null;
-
         BlockMenu menu = storage.inventories.get(l);
-        if (menu != null) return menu;
+        if (menu != null) return menu;//修复barrls附属的异常(barrels高清物品掉落还需修复barrels本体)
+        if (storage == null) return null;
         else return storage.loadInventory(l, BlockMenuPreset.getPreset(checkID(l)));
     }
 
